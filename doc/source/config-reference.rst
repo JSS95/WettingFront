@@ -28,7 +28,7 @@ additional fields.
 This document includes the docstrings for each analyzer which specifies the
 required fields.
 
-Basic
------
+Unidirectional
+--------------
 
-.. autofunction:: wettingfront.basic_analyzer
+.. autofunction:: wettingfront.unidirect_analyzer

@@ -101,10 +101,8 @@ def analyze_files(*paths: str):
                 continue
 
 
-def basic_analyzer(k, v):
-    """Basic analyzer.
-
-    The basic analyzer performs Otsu's binarization on the image and saves the result.
+def unidirect_analyzer(k, v):
+    """Unidirectional liquid imbibition in porous medium.
 
     In configuration file, the entry must have ``parameters`` field which contains the
     following sub-fields:
@@ -117,7 +115,7 @@ def basic_analyzer(k, v):
     .. code-block:: yaml
 
         foo:
-            type: Basic
+            type: Unidirectional
             parameters:
                 path: foo.jpg
                 output: output/foo.jpg

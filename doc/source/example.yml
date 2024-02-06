@@ -1,5 +1,5 @@
 entry 1:
-  type: Basic
+  type: Unidirectional
   parameters:
     path: $WETTINGFRONT_SAMPLES/example.jpg
     output: output/example.jpg

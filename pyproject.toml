@@ -45,7 +45,7 @@ dev = [
 ]
 
 [project.entry-points."wettingfront.analyzers"]
-Basic = "wettingfront:basic_analyzer"
+Unidirectional = "wettingfront:unidirect_analyzer"
 
 [tool.setuptools.dynamic]
 dependencies = {file = ["requirements.txt"]}

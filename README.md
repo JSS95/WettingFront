@@ -1,4 +1,8 @@
-# WettingFront
+# WettingFront - Wetting front image analysis
+
+[![Build Status](https://github.com/JSS95/wettingfront/actions/workflows/ci.yml/badge.svg)](https://github.com/JSS95/wettingfront/actions/workflows/ci.yml)
+[![Documentation Status](https://readthedocs.org/projects/wettingfront/badge/?version=latest)](https://wettingfront.readthedocs.io/en/latest/?badge=latest)
+[![License](https://img.shields.io/github/license/JSS95/wettingfront)](https://github.com/JSS95/wettingfront/blob/master/LICENSE)
 
 Python package for wetting front image analysis.
 

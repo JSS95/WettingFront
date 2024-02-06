@@ -4,11 +4,11 @@
 [![Documentation Status](https://readthedocs.org/projects/wettingfront/badge/?version=latest)](https://wettingfront.readthedocs.io/en/latest/?badge=latest)
 [![License](https://img.shields.io/github/license/JSS95/wettingfront)](https://github.com/JSS95/wettingfront/blob/master/LICENSE)
 
-Python package for wetting front image analysis.
+WettingFront provides an extensible framework to detect and analyze the wetting front by image analysis.
 
 ## Usage
 
-Analysis can be done by passing configuration files.
+Store the analysis parameters in configuration files and pass to the command:
 
 ```
 $ wettingfront analyze config1.yml conf2.yml ...
@@ -24,20 +24,18 @@ $ pip install git+https://github.com/JSS95/wettingfront.git
 
 ## Documentation
 
-To build the document yourself, you must download the full source code of the project and install the package with `doc` dependency.
+Wettingfront is documented with [Sphinx](https://pypi.org/project/Sphinx/).
+Documentation can be found on Read the Docs:
+
+> https://wettingfront.readthedocs.io
+
+If you want to build the document yourself, get the source code and install with `[doc]` option.
+Then go to `doc` directory and build the document.
 
 ```
-$ git clone https://github.com/JSS95/wettingfront.git
-$ cd wettingfront
 $ pip install .[doc]
-```
-
-Then run the following command to build the document.
-
-```
 $ cd doc
 $ make html
 ```
 
-Documents will be generated in `doc/build/html` directory.
-`index.html` file will lead you to main page.
+Document will be generated in `build/html` directory. Open `index.html` to see the central page.

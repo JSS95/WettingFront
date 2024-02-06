@@ -12,10 +12,6 @@ If you are not familiar with plugins and entrypoints, you may want to read
 and `Setuptools documentation <https://setuptools.pypa.io/en/latest/userguide/entry_point.html>`_
 first.
 
-The analyzer plugins are loaded from a group named
-``wettingfront.analyzers``. Define your analyzer in plugin and
-register using :func:`register_analyzer`.
-
 For example, let us consider that we want to implement an analysis type
 ``Foo``, i.e., for the following configuration file entry:
 
@@ -26,10 +22,6 @@ For example, let us consider that we want to implement an analysis type
         ...
 
 We can write a simple plugin for this. The package structure will be::
-
-    wettingfront-foo
-    ├── wettingfront_foo.py
-    └── pyproject.toml
 
     wettingfront-foo
     ├── pyproject.toml

@@ -43,12 +43,12 @@ Optional dependencies can be specified by adding them into brackets right after
 the package url/path. When specified, additional module are installed to help
 accessing extra features of the package.
 
-In WettingFront, all optional dependencies are for package
-development. Available specifications are:
+Available optional dependencies for WettingFront are:
 
-* ``test``: installs modules to run tests.
-* ``doc``: installs modules to build documentations.
-* ``dev``: installs every additional dependency for developers.
+* ``img``: access to image analysis features.
+* ``test``: run tests.
+* ``doc``: build documentations.
+* ``dev``: every additional dependency (useful for development).
 
 With commas without trailing whitespaces, i.e. ``[A,B]``, you can pass multiple
 specifications.
@@ -61,15 +61,15 @@ and installs the package.
 
 .. code-block:: bash
 
-   $ pip install git+https://epicgit.snu.ac.kr/Jisu/wettingfront.git
+   $ pip install git+https://github.com/JSS95/wettingfront.git
 
 If you want to pass install options, you need to specify the package name by
 ``#egg=``. For example, the following code installs the package with
-development dependencies.
+``dev`` dependencies.
 
 .. code-block:: bash
 
-   $ pip install git+https://epicgit.snu.ac.kr/Jisu/wettingfront#egg=wettingfront[dev]
+   $ pip install git+https://github.com/JSS95/wettingfront.git#egg=wettingfront[dev]
 
 .. note::
 

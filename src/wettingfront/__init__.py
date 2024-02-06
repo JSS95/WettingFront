@@ -10,7 +10,6 @@ import json
 import os
 import sys
 
-import cv2
 import yaml
 
 if sys.version_info < (3, 10):
@@ -102,13 +101,18 @@ def analyze_files(*paths: str):
 
 
 def unidirect_analyzer(k, v):
-    """Unidirectional liquid imbibition in porous medium.
+    """Image analysis for unidirectional liquid imbibition in porous medium.
 
-    In configuration file, the entry must have ``parameters`` field which contains the
-    following sub-fields:
+    .. note::
 
-    - **path** (`str`): Path to the input image file.
-    - **output** (`str`): Path to the output image file.
+        To evoke this analyzer, you need ``img`` optional dependency::
+
+            pip install wettingfront[img]
+
+    In configuration file, the entry must have the following sub-fields:
+
+    - **path** (`str`): Path to the input video file.
+    - **output** (`str`): Path to the output video file.
 
     The following is the example for an YAML entry:
 
@@ -116,20 +120,29 @@ def unidirect_analyzer(k, v):
 
         foo:
             type: Unidirectional
-            parameters:
-                path: foo.jpg
-                output: output/foo.jpg
+            path: foo.mp4
+            output: output/foo.mp4
     """
-    print(f"Analyzing {k}")
-    param = v["parameters"]
-    dirname, _ = os.path.split(param["output"])
+    import imageio.v3 as iio
+    import numpy as np
+
+    path = os.path.expandvars(v["path"])
+    output = os.path.expandvars(v["output"])
+    dirname, _ = os.path.split(output)
     if dirname:
         os.makedirs(dirname, exist_ok=True)
 
-    path = os.path.expandvars(param["path"])
-    gray = cv2.cvtColor(cv2.imread(path), cv2.COLOR_BGR2GRAY)
-    _, ret = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-    cv2.imwrite(param["output"], ret)
+    immeta = iio.immeta(path, plugin="pyav")
+    fps = immeta["fps"]
+    codec = immeta["codec"]
+    with iio.imopen(output, "w", plugin="pyav") as out:
+        out.init_video_stream(codec, fps=fps)
+
+        for frame in iio.imiter(path, plugin="pyav"):
+            gray = np.dot(frame, [0.2989, 0.5870, 0.1140])
+            h = np.argmax(np.abs(np.diff(np.mean(gray, axis=1))))
+            frame[h, :] = (255, 0, 0)
+            out.write_frame(frame)
 
 
 def main():

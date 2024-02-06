@@ -7,8 +7,11 @@ Tutorial
 
 .. note::
 
-    Before running this tutorial, environment variable ``$WETTINGFRONT_SAMPLES``
-    must be set:
+    To run this tutorial, you need ``img`` optional dependency::
+
+        pip install wettingfront[img]
+
+    Additionally, environment variable ``$WETTINGFRONT_SAMPLES`` must be set:
 
     .. tabs::
 
@@ -47,19 +50,18 @@ The contents of this configuration file are:
 .. literalinclude:: example.yml
     :language: yaml
 
-Running the following command will start the analysis.
-
-.. code-block:: bash
+Running the following command will start the analysis::
 
     wettingfront analyze config.yml
 
 Result:
 
-.. figure:: output/example.jpg
-   :align: center
-   :figwidth: 45%
+.. raw:: html
 
-   ``output/example.jpg``
+    <video controls width="320" height="256">
+        <source src="_static/example.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
 
 Configuration file format
 -------------------------

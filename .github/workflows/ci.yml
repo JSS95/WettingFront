@@ -56,8 +56,7 @@ jobs:
 
       - name: install package
         run: |
-          pip install -r requirements.txt
-          pip install mypy types-PyYAML
+          pip install .[img] mypy types-PyYAML
 
       - name: run mypy check
         run: mypy src

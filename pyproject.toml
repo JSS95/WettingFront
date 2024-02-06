@@ -23,6 +23,11 @@ repository = "https://github.com/JSS95/wettingfront"
 wettingfront = "wettingfront:main"
 
 [project.optional-dependencies]
+img = [
+    "numpy",
+    "imageio",
+    "av",
+]
 test = [
     "pytest",
 ]
@@ -31,6 +36,7 @@ doc = [
     "sphinx",
     "sphinx-autoapi",
     "sphinx-tabs >= 3.4.5",
+    "wettingfront[img]",
 ]
 dev = [
     "flake8",

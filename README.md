@@ -28,7 +28,7 @@ data3:
     ...
 ```
 
-Pass the file to the command:
+Pass the file to command:
 
 ```
 $ wettingfront analyze config.yml
@@ -44,7 +44,7 @@ WettingFront can be installed using `pip`.
 $ pip install wettingfront
 ```
 
-To access image processing feature, install with optional dependency `[img]`.
+To access image processing features, install with optional dependency `[img]`.
 
 ```
 $ pip install wettingfront[img]

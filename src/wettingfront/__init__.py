@@ -30,12 +30,6 @@ __all__ = [
 ]
 
 
-logging.basicConfig(
-    format="%(asctime)s | %(levelname)s | %(message)s",
-    datefmt="%m/%d/%Y %I:%M:%S %p",
-)
-
-
 def get_sample_path(*paths: str) -> str:
     """Get path to sample file.
 
@@ -93,7 +87,6 @@ def analyze_files(*paths: str) -> bool:
     ok = True
     for path in paths:
         path = os.path.expandvars(path)
-        logging.info(f"Analyzing file: '{path}'")
         _, ext = os.path.splitext(path)
         ext = ext.lstrip(os.path.extsep).lower()
         try:
@@ -111,23 +104,16 @@ def analyze_files(*paths: str) -> bool:
             ok = False
             continue
         for k, v in data.items():
-            logging.info(f"Analyzing entry: '{k}'")
             try:
                 typename = v["type"]
                 analyzer = ANALYZERS.get(typename, None)
                 if analyzer is None:
                     raise ValueError(f"Unknown analysis type: '{typename}'")
                 analyzer(k, v)
-                logging.info(f"Finished analyzing entry: '{k}'")
             except Exception:
-                logging.exception(f"Skipping entry: '{k}' (exception raised)")
+                logging.exception(f"Skipping entry: '{path}::{k}' (exception raised)")
                 ok = False
                 continue
-        logging.info(f"Finished analyzing file: '{path}'")
-    if ok:
-        logging.info("Finished analysis.")
-    else:
-        logging.error("Finished analysis but failed to analyze some entries.")
     return ok
 
 
@@ -252,6 +238,12 @@ def main():
         prog="wettingfront",
         description="Wetting front analysis.",
     )
+    parser.add_argument(
+        "--log-level",
+        choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
+        default="WARNING",
+        help="set logging level",
+    )
     subparsers = parser.add_subparsers(dest="command")
 
     parser_samples = subparsers.add_parser(
@@ -278,7 +270,16 @@ def main():
     parser_analyze.add_argument("file", type=str, nargs="+", help="configuration files")
 
     args = parser.parse_args()
-    logging.info(f"Input command: {' '.join(sys.argv)}")
+
+    loglevel = args.log_level.upper()
+    logging.basicConfig(
+        format="[%(asctime)s] [%(levelname)8s] --- %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
+        level=loglevel,
+    )
+
+    logging.debug(f"Input command: {' '.join(sys.argv)}")
+
     if args.command is None:
         parser.print_help(sys.stderr)
         sys.exit(1)

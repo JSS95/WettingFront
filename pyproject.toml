@@ -8,7 +8,7 @@ version = "1.0.0"
 authors = [
     {name = "Jisoo Song", email = "jeesoo9595@snu.ac.kr"}
 ]
-description = "Wetting front image analysis"
+description = "Wetting front analysis"
 readme = "README.md"
 requires-python = ">=3.8"
 license = {file = "LICENSE"}

@@ -38,6 +38,7 @@ def get_sample_path(*paths: str) -> str:
         Absolute path to the sample file.
 
     Examples:
+        >>> from wettingfront import get_sample_path
         >>> get_sample_path() # doctest: +SKIP
         'path/wettingfront/samples'
         >>> get_sample_path("myfile") # doctest: +SKIP

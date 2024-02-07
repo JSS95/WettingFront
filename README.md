@@ -1,8 +1,10 @@
 # WettingFront
 
-[![Build Status](https://github.com/JSS95/wettingfront/actions/workflows/ci.yml/badge.svg)](https://github.com/JSS95/wettingfront/actions/workflows/ci.yml)
-[![Documentation Status](https://readthedocs.org/projects/wettingfront/badge/?version=latest)](https://wettingfront.readthedocs.io/en/latest/?badge=latest)
 [![License](https://img.shields.io/github/license/JSS95/wettingfront)](https://github.com/JSS95/wettingfront/blob/master/LICENSE)
+[![CI](https://github.com/JSS95/wettingfront/actions/workflows/ci.yml/badge.svg)](https://github.com/JSS95/wettingfront/actions/workflows/ci.yml)
+[![Docs](https://readthedocs.org/projects/wettingfront/badge/?version=latest)](https://wettingfront.readthedocs.io/en/latest/?badge=latest)
+[![Supported Python Versions](https://img.shields.io/pypi/pyversions/wettingfront.svg)](https://pypi.python.org/pypi/wettingfront/)
+[![PyPI Version](https://img.shields.io/pypi/v/wettingfront.svg)](https://pypi.python.org/pypi/wettingfront/)
 
 ![title](https://wettingfront.readthedocs.io/en/latest/_images/index-1.png)
 

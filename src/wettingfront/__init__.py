@@ -10,6 +10,7 @@ import csv
 import json
 import os
 import sys
+from typing import Tuple
 
 import numpy as np
 import yaml
@@ -104,7 +105,7 @@ def analyze_files(*paths: str):
                 continue
 
 
-def fit_washburn(t, L) -> tuple[np.float64, np.float64, np.float64]:
+def fit_washburn(t, L) -> Tuple[np.float64, np.float64, np.float64]:
     r"""Fit data to Washburn's equation [#f1]_.
 
     The data are fitted to:

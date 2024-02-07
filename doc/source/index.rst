@@ -6,6 +6,25 @@
 Welcome to WettingFront's documentation!
 ========================================
 
+.. plot::
+   :context: reset
+
+   from wettingfront import get_sample_path
+   import pandas, matplotlib.pyplot as plt, imageio.v3 as iio
+   df = pandas.read_csv("output/example.csv")
+   fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(8, 4))
+   for sp in ax1.spines:
+       ax1.spines[sp].set_visible(False)
+   ax1.xaxis.set_visible(False)
+   ax1.yaxis.set_visible(False)
+   ax1.imshow(iio.imread(get_sample_path("example.jpg")))
+   ax2.plot(df["time (s)"], df["height (pixels)"], label="data")
+   ax2.plot(df["time (s)"], df["fitted height (pixels)"], "--", label="model")
+   ax2.set_xlabel("time (s)")
+   ax2.set_ylabel("height (pixels)")
+   ax2.legend()
+   fig.tight_layout()
+
 WettingFront is a Python package to visualize and analyze the wetting front.
 
 The advantages of WettingFront are:

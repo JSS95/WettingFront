@@ -16,7 +16,7 @@ jobs:
       - name: set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.11"
+          python-version: "3.12"
 
       - name: install dependencies
         run: |
@@ -52,7 +52,7 @@ jobs:
       - name: set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.11"
+          python-version: "3.12"
 
       - name: install package
         run: |
@@ -71,7 +71,7 @@ jobs:
       fail-fast: false
       matrix:
         os : [ubuntu-latest, windows-latest, macos-latest]
-        python: ["3.8", "3.9", "3.10", "3.11"]
+        python: ["3.8", "3.9", "3.10", "3.11", "3.12"]
 
     steps:
 
@@ -103,7 +103,7 @@ jobs:
       - name: set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.11"
+          python-version: "3.12"
 
       - name: install package
         run: |

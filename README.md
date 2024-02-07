@@ -2,6 +2,7 @@
 
 [![License](https://img.shields.io/github/license/JSS95/wettingfront)](https://github.com/JSS95/wettingfront/blob/master/LICENSE)
 [![CI](https://github.com/JSS95/wettingfront/actions/workflows/ci.yml/badge.svg)](https://github.com/JSS95/wettingfront/actions/workflows/ci.yml)
+[![CD](https://github.com/JSS95/wettingfront/actions/workflows/cd.yml/badge.svg)](https://github.com/JSS95/wettingfront/actions/workflows/cd.yml)
 [![Docs](https://readthedocs.org/projects/wettingfront/badge/?version=latest)](https://wettingfront.readthedocs.io/en/latest/?badge=latest)
 [![Supported Python Versions](https://img.shields.io/pypi/pyversions/wettingfront.svg)](https://pypi.python.org/pypi/wettingfront/)
 [![PyPI Version](https://img.shields.io/pypi/v/wettingfront.svg)](https://pypi.python.org/pypi/wettingfront/)

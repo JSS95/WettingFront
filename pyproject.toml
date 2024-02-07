@@ -4,6 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "wettingfront"
+version = "0.0.0"
 description = "Wetting front image analysis"
 readme = "README.md"
 requires-python = ">=3.8"
@@ -11,13 +12,35 @@ license = {file = "LICENSE"}
 authors = [
     {name = "Jisoo Song", email = "jeesoo9595@snu.ac.kr"}
 ]
-version = "0.0.0"
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: BSD License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3 :: Only",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Hydrology",
+    "Topic :: Scientific/Engineering :: Physics",
+    "Typing :: Typed",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX",
+    "Operating System :: Unix",
+    "Operating System :: MacOS",
+]
 dynamic = [
     "dependencies",
 ]
 
 [project.urls]
-repository = "https://github.com/JSS95/wettingfront"
+homepage = "https://github.com/JSS95/wettingfront"
+source = "https://github.com/JSS95/wettingfront"
+documentation = "https://wettingfront.readthedocs.io"
 
 [project.scripts]
 wettingfront = "wettingfront:main"

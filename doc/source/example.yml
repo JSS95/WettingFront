@@ -1,5 +1,5 @@
 entry 1:
-  type: Basic
-  parameters:
-    path: $WETTINGFRONT_SAMPLES/example.jpg
-    output: output/example.jpg
+  type: Unidirectional
+  path: $WETTINGFRONT_SAMPLES/example.mp4
+  output-vid: output/example.mp4
+  output-data: output/example.csv

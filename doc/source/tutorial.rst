@@ -7,8 +7,11 @@ Tutorial
 
 .. note::
 
-    Before running this tutorial, environment variable ``$WETTINGFRONT_SAMPLES``
-    must be set:
+    To run this tutorial, you need ``img`` optional dependency::
+
+        pip install wettingfront[img]
+
+    Additionally, environment variable ``$WETTINGFRONT_SAMPLES`` must be set:
 
     .. tabs::
 
@@ -47,19 +50,33 @@ The contents of this configuration file are:
 .. literalinclude:: example.yml
     :language: yaml
 
-Running the following command will start the analysis.
-
-.. code-block:: bash
+Running the following command will start the analysis::
 
     wettingfront analyze config.yml
 
 Result:
 
-.. figure:: output/example.jpg
-   :align: center
-   :figwidth: 45%
+.. raw:: html
 
-   ``output/example.jpg``
+    <video controls width="320" height="256">
+        <source src="_static/example.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+The output csv file contains the wetting height and its result of fitting to
+flow model.
+
+.. plot::
+    :include-source:
+    :context: reset
+
+    import pandas, matplotlib.pyplot as plt
+    df = pandas.read_csv("output/example.csv")
+    plt.plot(df["time (s)"], df["height (pixels)"], label="data")
+    plt.plot(df["time (s)"], df["fitted height (pixels)"], "--", label="fit")
+    plt.xlabel("time (s)")
+    plt.ylabel("height (pixels)")
+    plt.legend()
 
 Configuration file format
 -------------------------

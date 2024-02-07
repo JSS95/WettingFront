@@ -5,6 +5,7 @@
 
 import json
 import os
+import shutil
 import subprocess
 
 import yaml
@@ -29,6 +30,7 @@ extensions = [
     "autoapi.extension",
     "sphinx.ext.intersphinx",
     "sphinx_tabs.tabs",
+    "matplotlib.sphinxext.plot_directive",
 ]
 
 templates_path = ["_templates"]
@@ -56,6 +58,7 @@ def setup(sphinx):
 intersphinx_mapping = {
     "python": ("http://docs.python.org/", None),
     "pip": ("https://pip.pypa.io/en/stable/", None),
+    "numpy": ("https://numpy.org/doc/stable/", None),
     "mypy": ("https://mypy.readthedocs.io/en/stable/", None),
 }
 
@@ -64,7 +67,7 @@ intersphinx_mapping = {
 
 html_theme = "furo"
 html_title = "WettingFront"
-html_static_path = []  # type: ignore
+html_static_path = ["_static"]
 
 plot_html_show_formats = False
 plot_html_show_source_link = False
@@ -85,6 +88,9 @@ subprocess.call(
         "example.yml",
     ],
 )
+
+os.makedirs(html_static_path[0], exist_ok=True)
+shutil.copy("output/example.mp4", "_static/example.mp4")
 
 # Reference file
 

@@ -23,6 +23,11 @@ repository = "https://github.com/JSS95/wettingfront"
 wettingfront = "wettingfront:main"
 
 [project.optional-dependencies]
+img = [
+    "numpy",
+    "imageio",
+    "av",
+]
 test = [
     "pytest",
 ]
@@ -31,6 +36,9 @@ doc = [
     "sphinx",
     "sphinx-autoapi",
     "sphinx-tabs >= 3.4.5",
+    "matplotlib",
+    "pandas",
+    "wettingfront[img]",
 ]
 dev = [
     "flake8",
@@ -45,7 +53,7 @@ dev = [
 ]
 
 [project.entry-points."wettingfront.analyzers"]
-Basic = "wettingfront:basic_analyzer"
+Unidirectional = "wettingfront:unidirect_analyzer"
 
 [tool.setuptools.dynamic]
 dependencies = {file = ["requirements.txt"]}

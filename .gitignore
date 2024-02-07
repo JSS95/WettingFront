@@ -1,4 +1,5 @@
 # Custom entries
+doc/source/_static
 doc/source/help-*.txt
 doc/source/example.json
 doc/source/output/*

@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "wettingfront"
 description = "Wetting front image analysis"
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.8"
 license = {file = "LICENSE"}
 authors = [
     {name = "Jisoo Song", email = "jeesoo9595@snu.ac.kr"}

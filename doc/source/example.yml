@@ -1,4 +1,4 @@
-entry 1:
+data1:
   type: Unidirectional
   path: $WETTINGFRONT_SAMPLES/example.mp4
   output-vid: output/example.mp4

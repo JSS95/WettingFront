@@ -3,7 +3,6 @@
 # For the full list of built-in configuration values, see the documentation:
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 
-import json
 import os
 import shutil
 import subprocess
@@ -78,8 +77,6 @@ plot_html_show_source_link = False
 
 with open("example.yml", "r") as f:
     data = yaml.load(f, Loader=yaml.FullLoader)
-with open("example.json", "w") as outfile:
-    json.dump(data, outfile, indent=4)
 
 subprocess.call(
     [

@@ -17,11 +17,12 @@ def test_Unidirectional_only_data(tmp_path):
     path = tmp_path / "config.yml"
     with open(path, "w") as f:
         yaml.dump(config, f)
-    subprocess.call(
+    code = subprocess.call(
         [
             "wettingfront",
             "analyze",
             path,
         ],
     )
+    assert not code
     assert os.path.exists(config["data1"]["output-data"])

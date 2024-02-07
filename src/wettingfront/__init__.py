@@ -8,6 +8,7 @@ To analyze with command line, specify the parameters in configuration file(s) an
 import argparse
 import csv
 import json
+import logging
 import os
 import sys
 from typing import Tuple
@@ -29,6 +30,12 @@ __all__ = [
 ]
 
 
+logging.basicConfig(
+    format="%(asctime)s | %(levelname)s | %(message)s",
+    datefmt="%m/%d/%Y %I:%M:%S %p",
+)
+
+
 def get_sample_path(*paths: str) -> str:
     """Get path to sample file.
 
@@ -48,7 +55,7 @@ def get_sample_path(*paths: str) -> str:
     return str(files("wettingfront").joinpath("samples", *paths))
 
 
-def analyze_files(*paths: str):
+def analyze_files(*paths: str) -> bool:
     """Perform analysis from configuration files.
 
     Supported formats:
@@ -74,13 +81,19 @@ def analyze_files(*paths: str):
 
     Arguments:
         paths: Configuration file paths.
+
+    Returns:
+        Whether the analysis is finished without error.
     """
     # load analyzers
     ANALYZERS = {}
     for ep in entry_points(group="wettingfront.analyzers"):
         ANALYZERS[ep.name] = ep.load()
 
+    ok = True
     for path in paths:
+        path = os.path.expandvars(path)
+        logging.info(f"Analyzing file: '{path}'")
         _, ext = os.path.splitext(path)
         ext = ext.lstrip(os.path.extsep).lower()
         try:
@@ -90,20 +103,32 @@ def analyze_files(*paths: str):
                 elif ext == "json":
                     data = json.load(f)
                 else:
-                    print(f"Skipping {path} ({ext} not supported)")
+                    logging.error(f"Skipping file: '{path}' (format not supported)")
+                    ok = False
+                    continue
         except FileNotFoundError:
-            print(f"Skipping {path} (path does not exist)")
+            logging.error(f"Skipping file: '{path}' (does not exist)")
+            ok = False
             continue
         for k, v in data.items():
+            logging.info(f"Analyzing entry: '{k}'")
             try:
                 typename = v["type"]
                 analyzer = ANALYZERS.get(typename, None)
                 if analyzer is None:
-                    raise ValueError("Analysis type '%s' is not registered." % typename)
+                    raise ValueError(f"Unknown analysis type: '{typename}'")
                 analyzer(k, v)
-            except Exception as err:
-                print(f"Skipping {k} ({type(err).__name__}: {err})")
+                logging.info(f"Finished analyzing entry: '{k}'")
+            except Exception:
+                logging.exception(f"Skipping entry: '{k}' (exception raised)")
+                ok = False
                 continue
+        logging.info(f"Finished analyzing file: '{path}'")
+    if ok:
+        logging.info("Finished analysis.")
+    else:
+        logging.error("Finished analysis but failed to analyze some entries.")
+    return ok
 
 
 def fit_washburn(t, L) -> Tuple[np.float64, np.float64, np.float64]:
@@ -253,6 +278,7 @@ def main():
     parser_analyze.add_argument("file", type=str, nargs="+", help="configuration files")
 
     args = parser.parse_args()
+    logging.info(f"Input command: {' '.join(sys.argv)}")
     if args.command is None:
         parser.print_help(sys.stderr)
         sys.exit(1)
@@ -265,5 +291,10 @@ def main():
                     getter = ep.load()
                     print(getter())
                     break
+            else:
+                logging.error(f"Unknown plugin: '{args.plugin}'")
+                sys.exit(1)
     elif args.command == "analyze":
-        analyze_files(*args.file)
+        ok = analyze_files(*args.file)
+        if not ok:
+            sys.exit(1)

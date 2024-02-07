@@ -11,6 +11,7 @@ import json
 import os
 import sys
 
+import numpy as np
 import yaml
 
 if sys.version_info < (3, 10):
@@ -23,6 +24,7 @@ else:
 __all__ = [
     "get_sample_path",
     "analyze_files",
+    "fit_washburn",
 ]
 
 
@@ -101,6 +103,37 @@ def analyze_files(*paths: str):
                 continue
 
 
+def fit_washburn(t, L) -> tuple[np.float64, np.float64, np.float64]:
+    r"""Fit data to Washburn's equation [#f1]_.
+
+    The data are fitted to:
+
+    .. math::
+
+        L = k \sqrt{t - a} + b
+
+    where :math:`k` is penetrativity of the liquid and :math:`a` and :math:`b` are
+    correction terms for image analysis.
+
+    Arguments:
+        t (array_like, shape (M,)): Time.
+        L (array_like, shape (M,)): Penetration length.
+
+    Returns:
+        k, a, b
+            Washburn equation coefficients.
+
+    .. [#f1] Washburn, E. W. (1921). The dynamics of capillary flow.
+             Physical review, 17(3), 273.
+    """
+    # For polynomial fitting, fit L to t instead of the other way around.
+    A, B, C = np.polyfit(L, t, 2)
+    k = 1 / np.sqrt(A)
+    b = -B / 2 / A
+    a = C - B**2 / 4 / A
+    return (k, a, b)
+
+
 def unidirect_analyzer(k, v):
     """Image analysis for unidirectional liquid imbibition in porous medium.
 
@@ -111,7 +144,7 @@ def unidirect_analyzer(k, v):
             pip install wettingfront[img]
 
     Unidirectional analyzer detects the horizontal wetting front in the image by
-    pixel intensities and fits the data to Washburn's equation [#f1]_.
+    pixel intensities and fits the data using :func:`fit_washburn`.
 
     The analyzer defines the following fields in configuration entry:
 
@@ -131,11 +164,8 @@ def unidirect_analyzer(k, v):
             path: foo.mp4
             output-vid: output/foo.mp4
             output-data: output/foo.csv
-
-    .. [#f1] https://en.wikipedia.org/wiki/Washburn%27s_equation
     """
     import imageio.v3 as iio
-    import numpy as np
 
     # Prepare output
     path = os.path.expandvars(v["path"])
@@ -179,13 +209,7 @@ def unidirect_analyzer(k, v):
     # write data
     if out_data:
         times = np.arange(len(heights)) / fps
-
-        # Washburn's equation (with offsets added): h = k sqrt(t - a) + b
-        # Polynomial: t = (1 / k^2) h^2 + (-2b/k^2) h + (b^2/k^2 + a)
-        A, B, C = np.polyfit(heights, times, 2)
-        k = 1 / np.sqrt(A)
-        b = -B / 2 / A
-        a = C - B**2 / 4 / A
+        k, a, b = fit_washburn(times, heights)
         washburn = k * np.sqrt(times - a) + b
 
         with open(out_data, "w", newline="") as f:

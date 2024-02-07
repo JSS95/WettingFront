@@ -1,36 +1,63 @@
-# WettingFront - Wetting front image analysis
+# WettingFront
 
 [![Build Status](https://github.com/JSS95/wettingfront/actions/workflows/ci.yml/badge.svg)](https://github.com/JSS95/wettingfront/actions/workflows/ci.yml)
 [![Documentation Status](https://readthedocs.org/projects/wettingfront/badge/?version=latest)](https://wettingfront.readthedocs.io/en/latest/?badge=latest)
 [![License](https://img.shields.io/github/license/JSS95/wettingfront)](https://github.com/JSS95/wettingfront/blob/master/LICENSE)
 
-WettingFront provides an extensible framework to detect and analyze the wetting front by image analysis.
+![title](https://wettingfront.readthedocs.io/en/latest/_images/index-1.png)
+
+WettingFront is a simple and extensible Python package for wetting front analysis.
 
 ## Usage
 
-Store the analysis parameters in configuration files and pass to the command:
+Store analysis parameters in configuration file (YAML or JSON).
 
 ```
-$ wettingfront analyze config1.yml conf2.yml ...
+data1:
+    type: Unidirectional
+    path: your-video.mp4
+    output-vid: result.mp4
+    output-data: result.csv
+data2:
+    type: MyType
+    my-parameters: ...
+data3:
+    ...
 ```
 
-Refer to the documentation to learn more about the configuration file.
+Pass the file to the command:
+
+```
+$ wettingfront analyze config.yml
+```
+
+You can also define your own analysis type by [writing a plugin](https://wettingfront.readthedocs.io/en/latest/plugin.html).
 
 ## Installation
 
+WettingFront can be installed using `pip`.
+
 ```
-$ pip install git+https://github.com/JSS95/wettingfront.git
+$ pip install wettingfront
 ```
+
+To access image processing feature, install with optional dependency `[img]`.
+
+```
+$ pip install wettingfront[img]
+```
+
+Other optional dependencies are listed in [manual](https://wettingfront.readthedocs.io/en/latest/intro.html#installation).
 
 ## Documentation
 
 Wettingfront is documented with [Sphinx](https://pypi.org/project/Sphinx/).
-Documentation can be found on Read the Docs:
+The manual can be found on Read the Docs:
 
 > https://wettingfront.readthedocs.io
 
-If you want to build the document yourself, get the source code and install with `[doc]` option.
-Then go to `doc` directory and build the document.
+If you want to build the document yourself, get the source code and install with `[doc]` dependency.
+Then, go to `doc` directory and build the document:
 
 ```
 $ pip install .[doc]

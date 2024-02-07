@@ -9,6 +9,7 @@ User reference
 
    ../command-reference
    ../config-reference
+   ../analyzer-reference
 
 .. _module-reference:
 

@@ -1,15 +1,14 @@
 .. _config-reference:
 
-Configuration file reference
-============================
+Configuration file
+==================
 
 .. currentmodule:: wettingfront
 
-A configuration file consists of multiple entries representing individual
+Configuration file consists of multiple entries representing individual
 sets of analysis.
 
-For example, the following YAML file defines two entries whose names are
-``data1`` and ``data2``:
+The following YAML file defines two entries:
 
 .. code-block:: YAML
 
@@ -21,14 +20,9 @@ For example, the following YAML file defines two entries whose names are
         type: ...
         ...
 
-``type`` is a mandatory field which specifies the analyzer registered by
-:func:`~.register_analyzer`. Depending on the analyzer, entries may need to have
-additional fields.
+Each entry must have ``type`` field which specifies the analyzer.
+It may have other fields required by the specified analyzer.
 
-This document includes the docstrings for each analyzer which specifies the
-required fields.
+Refer to :func:`analyze_files` and :ref:`analyzer-reference` to know more about
+analyzer.
 
-Unidirectional
---------------
-
-.. autofunction:: wettingfront.unidirect_analyzer

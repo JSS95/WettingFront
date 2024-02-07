@@ -3,8 +3,6 @@
 Tutorial
 ========
 
-.. currentmodule:: wettingfront
-
 .. note::
 
     To run this tutorial, you need ``img`` optional dependency::
@@ -77,19 +75,3 @@ flow model.
     plt.xlabel("time (s)")
     plt.ylabel("height (pixels)")
     plt.legend()
-
-Configuration file format
--------------------------
-
-Configuration file can be in other formats as well.
-The following :download:`example.json` file is equivalent to
-:download:`example.yml`:
-
-.. literalinclude:: example.json
-    :language: json
-
-.. note::
-
-    Refer to the :ref:`config-reference` page for more information about the
-    configuration file and the supported analysis types.
-

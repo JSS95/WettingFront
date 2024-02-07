@@ -1,4 +1,4 @@
-"""Image analysis for wetting front experiment.
+"""Package to analyze wetting front data.
 
 To analyze with command line, specify the parameters in configuration file(s) and run::
 
@@ -45,30 +45,31 @@ def get_sample_path(*paths: str) -> str:
         >>> get_sample_path("myfile") # doctest: +SKIP
         'path/wettingfront/samples/myfile'
     """
-    sample_path = files("wettingfront.samples")
-    if not paths:
-        return str(sample_path._paths[0])  # type: ignore[attr-defined]
-    return str(sample_path.joinpath(*paths))
+    return str(files("wettingfront").joinpath("samples", *paths))
 
 
 def analyze_files(*paths: str):
     """Perform analysis from configuration files.
 
-    Configuration files can be YAML or JSON. Top-level entries in each file are
-    sequentially analyzed. Each entry must have ``type`` field which specifies the
-    analyzer registered by :func:`register_analyzer`. Other fields may be required by
-    the analyzer.
+    Supported formats:
+        * YAML
+        * JSON
 
-    For example, the following YAML file contains two entries: ``foo`` and ``bar``. Each
-    entry can be analyzed by registering an analyzer with ``Foo`` or ``Bar``.
+    Each file can have multiple entries. Each entry must have ``type`` field which
+    specifies the analyzer. Analyzers are searched from entry point group
+    ``"wettingfront.analyzers"``, and must have the following signature:
+
+    * :obj:`str`: entry name
+    * :obj:`dict`: entry fields
+
+    For example, the following YAML file contains ``foo`` entry which is analyzed by
+    ``Foo`` analyzer. The analyzer is loaded by searching an entry point whose name is
+    ``Foo``.
 
     .. code-block:: yaml
 
         foo:
             type: Foo
-            ...
-        bar:
-            type: Bar
             ...
 
     Arguments:
@@ -115,7 +116,7 @@ def fit_washburn(t, L) -> Tuple[np.float64, np.float64, np.float64]:
         L = k \sqrt{t - a} + b
 
     where :math:`k` is penetrativity of the liquid and :math:`a` and :math:`b` are
-    correction terms for image analysis.
+    correction terms for the starting point.
 
     Arguments:
         t (array_like, shape (M,)): Time.
@@ -225,7 +226,7 @@ def main():
     """Entry point function."""
     parser = argparse.ArgumentParser(
         prog="wettingfront",
-        description="Image analysis tool to visually detect wetting front.",
+        description="Wetting front analysis.",
     )
     subparsers = parser.add_subparsers(dest="command")
 

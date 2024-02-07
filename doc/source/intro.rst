@@ -6,54 +6,48 @@ Getting started
 Installation
 ------------
 
-WettingFront can be installed by :mod:`pip` from
-github repository.
+WettingFront can be downloaded from `PyPI <https://pypi.org/project/wettingfront/>`_
+by using :mod:`pip`::
 
-.. code-block:: bash
+   pip install wettingfront
 
-   pip install git+https://github.com/JSS95/wettingfront.git
+You can also install with optional dependencies as::
 
-This installs the package with its latest commit. If you want a specific
-version, append ``@[tag name]`` such as:
+   pip install wettingfront[img]
 
-.. code-block:: bash
+Available optional dependencies for WettingFront are:
 
-   pip install git+https://github.com/JSS95/wettingfront.git@v1.0.0
+* ``img``: access to image analysis features.
+* ``test``: run tests.
+* ``doc``: build documentations.
+* ``dev``: every dependency (for development).
 
-For more detailed instructions, refer to :ref:`install`.
+Usage
+-----
 
-Basic usage
------------
+Analysis starts with writing a :ref:`configuration file <config-reference>`,
+either as YAML or JSON.
 
-WettingFront provides command-line API to invoke analysis using configuration
-files.
+.. code-block:: yaml
 
-.. code-block:: bash
+   data1:
+      type: Unidirectional
+      path: your-video.mp4
+      output-vid: result.mp4
+      output-data: result.csv
+   data2:
+      type: MyType
+      my-parameters: ...
+   data3:
+      ...
 
-   wettingfront analyze config1.yml config2.json ...
+The ``type`` field is important.
+It defines how the analysis is done and what parameters are required.
+You can define and register your own type by writing a :ref:`plugin <plugin>`.
 
-It can be run as a package as well:
+After specifying the parameters in configuration file, pass it to
+:ref:`'wettingfront analyze' <command-reference>` command to perform analysis::
 
-.. code-block:: bash
+   wettingfront analyze config.yml
 
-   python -m wettingfront analyze config1.yml config2.json ...
-
-Check :ref:`config-reference` to learn about the configuration file structure.
-
-.. note::
-   To check the other commands, run:
-
-   .. code-block:: bash
-
-      wettingfront -h
-
-   Or you can refer to :ref:`command-reference` page.
-
-Next steps
-----------
-
-For more detailed information, please refer to the following pages:
-
-* :ref:`tutorial` pages provides quick examples.
-* Read :ref:`module-reference` for the Python runtime API.
-* :ref:`explanation` page includes detailed information for developers.
+Refer to :ref:`tutorial` page for a runnable example.

@@ -25,22 +25,15 @@ Welcome to WettingFront's documentation!
    ax2.legend()
    fig.tight_layout()
 
-WettingFront is a Python package to visualize and analyze the wetting front.
-
-The advantages of WettingFront are:
-
-* Provides simple image analysis scheme.
-* Good extensibility.
-* Written in pure Python.
-
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
    intro
    tutorial
+   plugin
    reference/index
-   explanation/index
+   development
 
 Indices and tables
 ==================

@@ -63,6 +63,21 @@ Result:
         Your browser does not support the video tag.
     </video>
 
+The output csv file contains the wetting height and its result of fitting to
+flow model.
+
+.. plot::
+    :include-source:
+    :context: reset
+
+    import pandas, matplotlib.pyplot as plt
+    df = pandas.read_csv("output/example.csv")
+    plt.plot(df["time (s)"], df["height (pixels)"], label="data")
+    plt.plot(df["time (s)"], df["fitted height (pixels)"], "--", label="fit")
+    plt.xlabel("time (s)")
+    plt.ylabel("height (pixels)")
+    plt.legend()
+
 Configuration file format
 -------------------------
 

@@ -30,6 +30,7 @@ extensions = [
     "autoapi.extension",
     "sphinx.ext.intersphinx",
     "sphinx_tabs.tabs",
+    "matplotlib.sphinxext.plot_directive",
 ]
 
 templates_path = ["_templates"]

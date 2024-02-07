@@ -36,6 +36,8 @@ doc = [
     "sphinx",
     "sphinx-autoapi",
     "sphinx-tabs >= 3.4.5",
+    "matplotlib",
+    "pandas",
     "wettingfront[img]",
 ]
 dev = [

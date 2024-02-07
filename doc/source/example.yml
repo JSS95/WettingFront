@@ -1,4 +1,5 @@
 entry 1:
   type: Unidirectional
   path: $WETTINGFRONT_SAMPLES/example.mp4
-  output: output/example.mp4
+  output-vid: output/example.mp4
+  output-data: output/example.csv

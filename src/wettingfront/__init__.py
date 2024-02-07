@@ -206,7 +206,6 @@ def unidirect_analyzer(k, v):
                 heights.append(h)
     elif out_data:
         for frame, h in gen:
-            out.write_frame(frame)
             heights.append(h)
 
     # write data

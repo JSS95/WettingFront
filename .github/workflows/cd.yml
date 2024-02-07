@@ -20,8 +20,8 @@ jobs:
 
       - name: build package
         run: |
-          pip install wheel
-          python setup.py sdist bdist_wheel
+          pip install build
+          python -m build
 
       - name: publish to PyPI
         run: |

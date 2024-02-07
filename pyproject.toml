@@ -52,6 +52,7 @@ img = [
 ]
 test = [
     "pytest",
+    "wettingfront[img]",
 ]
 doc = [
     "furo",

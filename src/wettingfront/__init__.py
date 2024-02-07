@@ -107,9 +107,12 @@ def analyze_files(*paths: str) -> bool:
             try:
                 typename = v["type"]
                 analyzer = ANALYZERS.get(typename, None)
-                if analyzer is None:
-                    raise ValueError(f"Unknown analysis type: '{typename}'")
-                analyzer(k, v)
+                if analyzer is not None:
+                    analyzer(k, v)
+                else:
+                    logging.error(
+                        f"Skipping entry: '{path}::{k}' (unknown type: '{typename}')"
+                    )
             except Exception:
                 logging.exception(f"Skipping entry: '{path}::{k}' (exception raised)")
                 ok = False

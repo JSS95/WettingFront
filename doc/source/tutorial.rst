@@ -73,7 +73,7 @@ flow model.
     import pandas, matplotlib.pyplot as plt
     df = pandas.read_csv("output/example.csv")
     plt.plot(df["time (s)"], df["height (pixels)"], label="data")
-    plt.plot(df["time (s)"], df["fitted height (pixels)"], "--", label="fit")
+    plt.plot(df["time (s)"], df["fitted height (pixels)"], "--", label="model")
     plt.xlabel("time (s)")
     plt.ylabel("height (pixels)")
     plt.legend()

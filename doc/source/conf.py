@@ -26,6 +26,7 @@ author = "Jisoo Song"
 extensions = [
     "sphinx.ext.napoleon",
     "sphinx.ext.autodoc",
+    "sphinx.ext.viewcode",
     "autoapi.extension",
     "sphinx.ext.intersphinx",
     "sphinx_tabs.tabs",

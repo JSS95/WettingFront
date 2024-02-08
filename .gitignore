@@ -1,8 +1,7 @@
 # Custom entries
 doc/source/_static
-doc/source/help-*.txt
-doc/source/example.json
 doc/source/output/*
+doc/source/help-*.txt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

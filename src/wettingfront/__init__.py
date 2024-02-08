@@ -11,10 +11,11 @@ import json
 import logging
 import os
 import sys
-from typing import Tuple
+from typing import Callable, Tuple
 
 import numpy as np
 import yaml
+from scipy.optimize import curve_fit  # type: ignore[import-untyped]
 
 if sys.version_info < (3, 10):
     from importlib_metadata import entry_points
@@ -120,7 +121,7 @@ def analyze_files(*paths: str) -> bool:
     return ok
 
 
-def fit_washburn(t, L) -> Tuple[np.float64, np.float64, np.float64]:
+def fit_washburn(t, L) -> Tuple[Callable, Tuple[np.float64, np.float64, np.float64]]:
     r"""Fit data to Washburn's equation [#f1]_.
 
     The data are fitted to:
@@ -137,18 +138,25 @@ def fit_washburn(t, L) -> Tuple[np.float64, np.float64, np.float64]:
         L (array_like, shape (M,)): Penetration length.
 
     Returns:
+        func
+            Washburn euqation function f(t, k, a, b).
         k, a, b
             Washburn equation coefficients.
 
     .. [#f1] Washburn, E. W. (1921). The dynamics of capillary flow.
              Physical review, 17(3), 273.
     """
-    # For polynomial fitting, fit L to t instead of the other way around.
-    A, B, C = np.polyfit(L, t, 2)
-    k = 1 / np.sqrt(A)
-    b = -B / 2 / A
-    a = C - B**2 / 4 / A
-    return (k, a, b)
+
+    def func(t, k, a, b):
+        return k * np.sqrt(t - a) + b
+
+    ret, _ = curve_fit(
+        func,
+        t,
+        L,
+        bounds=((-np.inf, -np.inf, -np.inf), (np.inf, t[0], np.inf)),
+    )
+    return func, ret
 
 
 def unidirect_analyzer(k, v):
@@ -225,8 +233,8 @@ def unidirect_analyzer(k, v):
     # write data
     if out_data:
         times = np.arange(len(heights)) / fps
-        k, a, b = fit_washburn(times, heights)
-        washburn = k * np.sqrt(times - a) + b
+        func, (k, a, b) = fit_washburn(times, heights)
+        washburn = func(times, k, a, b)
 
         with open(out_data, "w", newline="") as f:
             writer = csv.writer(f)

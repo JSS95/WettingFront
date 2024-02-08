@@ -87,7 +87,7 @@ subprocess.call(
     ],
 )
 
-os.makedirs(html_static_path[0], exist_ok=True)
+os.makedirs("_static", exist_ok=True)
 shutil.copy("output/example.mp4", "_static/example.mp4")
 
 # Reference file

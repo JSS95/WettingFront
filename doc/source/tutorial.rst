@@ -50,7 +50,7 @@ The contents of this configuration file are:
 
 Running the following command will start the analysis::
 
-    wettingfront analyze config.yml
+    wettingfront analyze example.yml
 
 Result:
 

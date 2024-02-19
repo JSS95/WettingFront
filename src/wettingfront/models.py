@@ -40,7 +40,7 @@ def fit_washburn(t, x) -> Tuple[Callable, Tuple[np.float64]]:
         return k * np.sqrt(t)
 
     ret, _ = curve_fit(func, t, x)
-    return func, ret
+    return lambda t: func(t, *ret), ret
 
 
 def fit_washburn_rideal(t, x) -> Tuple[Callable, Tuple[np.float64, np.float64]]:

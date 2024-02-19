@@ -199,8 +199,8 @@ def unidirect_analyzer(k, v):
     # write data
     if out_data:
         times = np.arange(len(heights)) / fps
-        func, args = model(times, heights)
-        predict = func(times, *args)
+        func, _ = model(times, heights)
+        predict = func(times)
 
         with open(out_data, "w", newline="") as f:
             writer = csv.writer(f)

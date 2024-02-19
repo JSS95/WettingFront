@@ -79,17 +79,19 @@ Note that the model must strictly adhere to the prescribed function signature.
 Arguments
 ^^^^^^^^^
 
-1. array_like (shape ``(M,)``)
-    Timestamp.
-2. array_like (shape ``(M,)``)
-    Penetration length.
+1. Timestamp
+    1-D array with shape (M,).
+2. Penetration length
+    1-D array with shape (M,).
 
 Returns
 ^^^^^^^
 
-1. Prediction function (callable)
-    Takes 1-D timestamp and returns predicted penetration length.
+1. Predictor function
+    Unary callable which takes 1-D array of timestamp and returns
+    1-D array of predicted penetration length.
 2. Fitted parameters (tuple)
+    Analyzer can refer to this value for further use.
 
 Samples
 -------

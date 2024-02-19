@@ -88,7 +88,7 @@ subprocess.call(
 )
 
 os.makedirs("_static", exist_ok=True)
-shutil.copy("output/example.mp4", "_static/example.mp4")
+shutil.copy("output/example1.mp4", "_static/example1.mp4")
 
 # Reference file
 

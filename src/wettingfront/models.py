@@ -7,6 +7,7 @@ from scipy.optimize import curve_fit, root  # type: ignore[import-untyped]
 
 __all__ = [
     "fit_washburn",
+    "fit_washburn_offset",
     "fit_washburn_rideal",
 ]
 
@@ -40,6 +41,41 @@ def fit_washburn(t, x) -> Tuple[Callable, Tuple[np.float64]]:
         return k * np.sqrt(t)
 
     ret, _ = curve_fit(func, t, x)
+    return lambda t: func(t, *ret), ret
+
+
+def fit_washburn_offset(t, x) -> Tuple[Callable, Tuple[np.float64]]:
+    r"""Fit data to Washburn's equation [#f1]_ with offset.
+
+    The data are fitted to:
+
+    .. math::
+
+        x = k \sqrt{t - a} + b
+
+    where :math:`k` is penetrativity of the liquid and :math:`a` and :math:`b` are
+    offsets for image analysis.
+
+    Arguments:
+        t (array_like, shape (M,)): Time.
+        x (array_like, shape (M,)): Penetration length.
+
+    Returns:
+        func
+            Washburn equation function f(t).
+        (k, a, b)
+            Fitted parameters.
+    """
+
+    def func(t, k, a, b):
+        return k * np.sqrt(t - a) + b
+
+    ret, _ = curve_fit(
+        func,
+        t,
+        x,
+        bounds=((-np.inf, -np.inf, -np.inf), (np.inf, t[0], np.inf)),
+    )
     return lambda t: func(t, *ret), ret
 
 

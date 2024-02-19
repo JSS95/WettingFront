@@ -11,15 +11,17 @@ Welcome to WettingFront's documentation!
 
    from wettingfront import get_sample_path
    import pandas, matplotlib.pyplot as plt, imageio.v3 as iio
-   df = pandas.read_csv("output/example.csv")
+   df1 = pandas.read_csv("output/example1.csv")
+   df2 = pandas.read_csv("output/example2.csv")
    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(8, 4))
    for sp in ax1.spines:
        ax1.spines[sp].set_visible(False)
    ax1.xaxis.set_visible(False)
    ax1.yaxis.set_visible(False)
    ax1.imshow(iio.imread(get_sample_path("example.jpg")))
-   ax2.plot(df["time (s)"], df["height (pixels)"], label="data")
-   ax2.plot(df["time (s)"], df["fitted height (pixels)"], "--", label="model")
+   ax2.plot(df1["time (s)"], df1["height (pixels)"], label="data")
+   ax2.plot(df1["time (s)"], df1["fitted height (pixels)"], "--", label="model 1")
+   ax2.plot(df2["time (s)"], df2["fitted height (pixels)"], "-.", label="model 2")
    ax2.set_xlabel("time (s)")
    ax2.set_ylabel("height (pixels)")
    ax2.legend()

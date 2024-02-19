@@ -1,6 +1,12 @@
-data1:
+entry1:
   type: Unidirectional
   model: Washburn
   path: $WETTINGFRONT_SAMPLES/example.mp4
-  output-vid: output/example.mp4
-  output-data: output/example.csv
+  output-vid: output/example1.mp4
+  output-data: output/example1.csv
+
+entry2:
+  type: Unidirectional
+  model: Washburn_offset
+  path: $WETTINGFRONT_SAMPLES/example.mp4
+  output-data: output/example2.csv

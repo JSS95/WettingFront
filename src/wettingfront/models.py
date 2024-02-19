@@ -50,7 +50,7 @@ def fit_washburn_rideal(t, x) -> Tuple[Callable, Tuple[np.float64, np.float64]]:
 
     .. math::
 
-        t = \frac{\alpha}{2\beta}x^2 - \frac{1}{\alpha}\ln{\frac{\alpha}{\sqrt{\beta}}x}
+        t = \frac{\alpha}{2\beta}x^2 - \frac{1}{\alpha}\ln{x}
 
     where :math:`\alpha` and :math:`\beta` denotes the ratios between viscous drag,
     surface tension and inertial force [#f3]_.
@@ -81,7 +81,7 @@ def fit_washburn_rideal(t, x) -> Tuple[Callable, Tuple[np.float64, np.float64]]:
         return np.piecewise(
             x,
             [x > 0, x == 0],
-            [lambda x: a / 2 / b * x**2 - 1 / a * np.log(a / np.sqrt(b) * x), 0],
+            [lambda x: a / 2 / b * x**2 - 1 / a * np.log(x), 0],
         )
 
     ret, _ = curve_fit(washburn_rideal, x, t)

@@ -128,10 +128,9 @@ def fit_washburn(t, L) -> Tuple[Callable, Tuple[np.float64, np.float64, np.float
 
     .. math::
 
-        L = k \sqrt{t - a} + b
+        L = k \sqrt{t}
 
-    where :math:`k` is penetrativity of the liquid and :math:`a` and :math:`b` are
-    correction terms for the starting point.
+    where :math:`k` is penetrativity of the liquid.
 
     Arguments:
         t (array_like, shape (M,)): Time.
@@ -139,23 +138,18 @@ def fit_washburn(t, L) -> Tuple[Callable, Tuple[np.float64, np.float64, np.float
 
     Returns:
         func
-            Washburn euqation function f(t, k, a, b).
-        k, a, b
-            Washburn equation coefficients.
+            Washburn equation function f(t, k).
+        (k,)
+            Washburn equation coefficient.
 
     .. [#f1] Washburn, E. W. (1921). The dynamics of capillary flow.
              Physical review, 17(3), 273.
     """
 
-    def func(t, k, a, b):
-        return k * np.sqrt(t - a) + b
+    def func(t, k):
+        return k * np.sqrt(t)
 
-    ret, _ = curve_fit(
-        func,
-        t,
-        L,
-        bounds=((-np.inf, -np.inf, -np.inf), (np.inf, t[0], np.inf)),
-    )
+    ret, _ = curve_fit(func, t, L)
     return func, ret
 
 
@@ -233,8 +227,8 @@ def unidirect_analyzer(k, v):
     # write data
     if out_data:
         times = np.arange(len(heights)) / fps
-        func, (k, a, b) = fit_washburn(times, heights)
-        washburn = func(times, k, a, b)
+        func, (k,) = fit_washburn(times, heights)
+        washburn = func(times, k)
 
         with open(out_data, "w", newline="") as f:
             writer = csv.writer(f)

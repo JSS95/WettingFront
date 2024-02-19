@@ -65,9 +65,6 @@ def fit_washburn_offset(t, x) -> Tuple[Callable, Tuple[np.float64]]:
             Washburn equation function f(t).
         (k, a, b)
             Fitted parameters.
-
-    .. [#f1] Washburn, E. W. (1921). The dynamics of capillary flow.
-             Physical review, 17(3), 273.
     """
 
     def func(t, k, a, b):

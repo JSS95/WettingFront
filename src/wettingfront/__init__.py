@@ -11,6 +11,7 @@ import json
 import logging
 import os
 import sys
+from typing import List, Optional
 
 import numpy as np
 import yaml
@@ -47,7 +48,7 @@ def get_sample_path(*paths: str) -> str:
     return str(files("wettingfront").joinpath("samples", *paths))
 
 
-def analyze_files(*paths: str) -> bool:
+def analyze_files(*paths: str, entries: Optional[List[str]] = None) -> bool:
     """Perform analysis from configuration files.
 
     Supported formats:
@@ -73,6 +74,7 @@ def analyze_files(*paths: str) -> bool:
 
     Arguments:
         paths: Configuration file paths.
+        entries: If passed, only the entries with specified name are analyzed.
 
     Returns:
         Whether the analysis is finished without error.
@@ -102,6 +104,9 @@ def analyze_files(*paths: str) -> bool:
             ok = False
             continue
         for k, v in data.items():
+            if entries is not None:
+                if k not in entries:
+                    continue
             try:
                 typename = v["type"]
                 analyzer = ANALYZERS.get(typename, None)
@@ -257,6 +262,12 @@ def main():
         ),
     )
     analyze.add_argument("file", type=str, nargs="+", help="configuration files")
+    analyze.add_argument(
+        "-e",
+        "--entry",
+        action="append",
+        help="entries in configuration files",
+    )
 
     args = parser.parse_args()
 
@@ -309,6 +320,6 @@ def main():
             line = col0.ljust(col0_max) + " " * space + col1
             print(line)
     elif args.command == "analyze":
-        ok = analyze_files(*args.file)
+        ok = analyze_files(*args.file, entries=args.entry)
         if not ok:
             sys.exit(1)

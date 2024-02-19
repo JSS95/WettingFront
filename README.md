@@ -18,6 +18,7 @@ Store analysis parameters in configuration file (YAML or JSON).
 ```
 data1:
     type: Unidirectional
+    model: Washburn
     path: your-video.mp4
     output-vid: result.mp4
     output-data: result.csv

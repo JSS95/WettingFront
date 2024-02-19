@@ -103,3 +103,7 @@ f.close()
 f = open("help-wettingfront-analyze.txt", "w")
 subprocess.call(["wettingfront", "analyze", "-h"], stdout=f)
 f.close()
+
+f = open("help-wettingfront-models.txt", "w")
+subprocess.call(["wettingfront", "models", "-h"], stdout=f)
+f.close()

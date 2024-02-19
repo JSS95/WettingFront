@@ -5,8 +5,8 @@ Writing plugins
 
 .. currentmodule:: wettingfront
 
-By writing a plugin, you can define and register your own analysis type and
-use it in your configuration file.
+By writing a plugin, you can define your own analysis routines and specify them
+in your configuration file.
 
 .. note::
 
@@ -52,6 +52,46 @@ Then, in ``pyproject.toml`` we define a table to register
 
 Now, by installing the ``wettingfront-foo`` package, the analysis type ``Foo``
 will be recognized.
+
+Models
+------
+
+During the analysis, you are likely to interpret the data using models
+describing rate of penetration, such as :func:`~.models.fit_washburn`.
+Instead of using default models, you can define your own by writing plugin.
+
+With the package structure described above, in ``foo.py`` we define:
+
+.. code-block:: python
+
+    def my_model(t, x):
+        ... # define your model
+
+and register an entry point in ``pyproject.toml``:
+
+.. code-block:: toml
+
+    [project.entry-points."wettingfront.models"]
+    MyModel = "foo:my_model"
+
+Note that the model must strictly adhere to the prescribed function signature.
+
+Arguments
+^^^^^^^^^
+
+1. Timestamp
+    1-D array with shape (M,).
+2. Penetration length
+    1-D array with shape (M,).
+
+Returns
+^^^^^^^
+
+1. Predictor function
+    Unary callable which takes 1-D array of timestamp and returns
+    1-D array of predicted penetration length.
+2. Fitted parameters (tuple)
+    Analyzer can refer to this value for further use.
 
 Samples
 -------

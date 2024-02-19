@@ -75,6 +75,10 @@ dev = [
     "wettingfront[test,doc]",
 ]
 
+[project.entry-points."wettingfront.models"]
+Washburn = "wettingfront.models:fit_washburn"
+Washburn-Rideal = "wettingfront.models:fit_washburn_rideal"
+
 [project.entry-points."wettingfront.analyzers"]
 Unidirectional = "wettingfront:unidirect_analyzer"
 

@@ -235,6 +235,12 @@ def main():
         help="name of the plugin",
     )
 
+    subparsers.add_parser(
+        "models",
+        description="Print installed models.",
+        help="print installed models",
+    )
+
     parser_analyze = subparsers.add_parser(
         "analyze",
         description="Parse configuration files and analyze.",
@@ -272,6 +278,17 @@ def main():
             else:
                 logging.error(f"Unknown plugin: '{args.plugin}'")
                 sys.exit(1)
+    elif args.command == "models":
+        header = [("NAME", "PACKAGE")]
+        models = [
+            (ep.name, ep.value.split(".")[0])
+            for ep in entry_points(group="wettingfront.models")
+        ]
+        col0_max = len(max(m[0] for m in models))
+        space = 3
+        for col0, col1 in header + models:
+            line = col0.ljust(col0_max) + " " * space + col1
+            print(line)
     elif args.command == "analyze":
         ok = analyze_files(*args.file)
         if not ok:

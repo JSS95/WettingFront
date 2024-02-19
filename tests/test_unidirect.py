@@ -10,6 +10,7 @@ def test_Unidirectional_only_data(tmp_path):
     config = dict(
         data1={
             "type": "Unidirectional",
+            "model": "Washburn",
             "path": get_sample_path("example.mp4"),
             "output-data": str(tmp_path / "data.csv"),
         }

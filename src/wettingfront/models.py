@@ -11,26 +11,26 @@ __all__ = [
 ]
 
 
-def fit_washburn(t, L) -> Tuple[Callable, Tuple[np.float64]]:
+def fit_washburn(t, x) -> Tuple[Callable, Tuple[np.float64]]:
     r"""Fit data to Washburn's equation [#f1]_.
 
     The data are fitted to:
 
     .. math::
 
-        L = k \sqrt{t}
+        x = k \sqrt{t}
 
     where :math:`k` is penetrativity of the liquid.
 
     Arguments:
         t (array_like, shape (M,)): Time.
-        L (array_like, shape (M,)): Penetration length.
+        x (array_like, shape (M,)): Penetration length.
 
     Returns:
         func
-            Washburn equation function f(t, k).
+            Washburn equation function f(t).
         (k,)
-            Argument for *func*.
+            Fitted parameters.
 
     .. [#f1] Washburn, E. W. (1921). The dynamics of capillary flow.
              Physical review, 17(3), 273.
@@ -39,31 +39,31 @@ def fit_washburn(t, L) -> Tuple[Callable, Tuple[np.float64]]:
     def func(t, k):
         return k * np.sqrt(t)
 
-    ret, _ = curve_fit(func, t, L)
+    ret, _ = curve_fit(func, t, x)
     return func, ret
 
 
-def fit_washburn_rideal(t, z) -> Tuple[Callable, Tuple[np.float64, np.float64]]:
+def fit_washburn_rideal(t, x) -> Tuple[Callable, Tuple[np.float64, np.float64]]:
     r"""Fit data to Washburn-Rideal equation [#f2]_.
 
     The data are fitted to:
 
     .. math::
 
-        t = \frac{\alpha}{2\beta}z^2 - \frac{1}{\alpha}\ln{\frac{\alpha}{\sqrt{\beta}}z}
+        t = \frac{\alpha}{2\beta}x^2 - \frac{1}{\alpha}\ln{\frac{\alpha}{\sqrt{\beta}}x}
 
-    where :math:`\alpha` and :math:`\beta` denotes the ratios of viscous drag,
+    where :math:`\alpha` and :math:`\beta` denotes the ratios between viscous drag,
     surface tension and inertial force [#f3]_.
 
     Arguments:
         t (array_like, shape (M,)): Time.
-        z (array_like, shape (M,)): Penetration length.
+        x (array_like, shape (M,)): Penetration length.
 
     Returns:
         func
-            Washburn-Rideal equation function f(t, alpha, beta).
+            Washburn-Rideal equation function f(t).
         (alpha, beta)
-            Arguments for *func*.
+            Fitted parameters.
 
     .. [#f2] Rideal, E. K. (1922). CVIII. On the flow of liquids under capillary
              pressure. The London, Edinburgh, and Dublin Philosophical Magazine and
@@ -77,17 +77,17 @@ def fit_washburn_rideal(t, z) -> Tuple[Callable, Tuple[np.float64, np.float64]]:
     def washburn(t, a, b):
         return np.sqrt(2 * b / a * t)
 
-    def washburn_rideal(z, a, b):
+    def washburn_rideal(x, a, b):
         return np.piecewise(
-            z,
-            [z > 0, z == 0],
-            [lambda z: a / 2 / b * z**2 - 1 / a * np.log(a / np.sqrt(b) * z), 0],
+            x,
+            [x > 0, x == 0],
+            [lambda x: a / 2 / b * x**2 - 1 / a * np.log(a / np.sqrt(b) * x), 0],
         )
 
-    ret, _ = curve_fit(washburn_rideal, z, t)
+    ret, _ = curve_fit(washburn_rideal, x, t)
 
     def func(t):
         t = np.array(t)
-        return root(lambda z: washburn_rideal(z, *ret) - t, washburn(t, *ret)).x
+        return root(lambda x: washburn_rideal(x, *ret) - t, washburn(t, *ret)).x
 
     return func, ret

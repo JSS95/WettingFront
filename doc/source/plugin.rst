@@ -72,7 +72,7 @@ and register an entry point in ``pyproject.toml``:
 .. code-block:: toml
 
     [project.entry-points."wettingfront.models"]
-    MyModel = "foo:foo_analyzer"
+    MyModel = "foo:my_model"
 
 Note that the model must strictly adhere to the prescribed function signature.
 

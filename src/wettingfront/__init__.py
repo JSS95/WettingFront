@@ -223,16 +223,22 @@ def main():
     )
     subparsers = parser.add_subparsers(dest="command")
 
-    parser_samples = subparsers.add_parser(
+    samples = subparsers.add_parser(
         "samples",
         description="Print path to sample directory.",
         help="print path to sample directory",
-    )
-    parser_samples.add_argument(
+    ).add_mutually_exclusive_group()
+    samples.add_argument(
         "plugin",
         type=str,
         nargs="?",
         help="name of the plugin",
+    )
+    samples.add_argument(
+        "-l",
+        "--list",
+        action="store_true",
+        help="list plugin names",
     )
 
     subparsers.add_parser(
@@ -241,7 +247,7 @@ def main():
         help="print installed models",
     )
 
-    parser_analyze = subparsers.add_parser(
+    analyze = subparsers.add_parser(
         "analyze",
         description="Parse configuration files and analyze.",
         help="parse configuration files and analyze",
@@ -250,7 +256,7 @@ def main():
             "Refer to the package documentation for configuration file structure."
         ),
     )
-    parser_analyze.add_argument("file", type=str, nargs="+", help="configuration files")
+    analyze.add_argument("file", type=str, nargs="+", help="configuration files")
 
     args = parser.parse_args()
 
@@ -267,7 +273,18 @@ def main():
         parser.print_help(sys.stderr)
         sys.exit(1)
     elif args.command == "samples":
-        if args.plugin is None:
+        if args.list:
+            header = [("PLUGIN", "PATH")]
+            paths = [
+                (ep.name, ep.load()())
+                for ep in entry_points(group="wettingfront.samples")
+            ]
+            col0_max = max(len(p[0]) for p in header + paths)
+            space = 3
+            for col0, col1 in header + paths:
+                line = col0.ljust(col0_max) + " " * space + col1
+                print(line)
+        elif args.plugin is None:
             print(get_sample_path())
         else:
             for ep in entry_points(group="wettingfront.samples"):
@@ -276,7 +293,9 @@ def main():
                     print(getter())
                     break
             else:
-                logging.error(f"Unknown plugin: '{args.plugin}'")
+                logging.error(
+                    f"Unknown plugin: '{args.plugin}' (use '-l' option to list plugins)"
+                )
                 sys.exit(1)
     elif args.command == "models":
         header = [("NAME", "PACKAGE")]
@@ -284,7 +303,7 @@ def main():
             (ep.name, ep.value.split(".")[0])
             for ep in entry_points(group="wettingfront.models")
         ]
-        col0_max = len(max(m[0] for m in models))
+        col0_max = max(len(m[0]) for m in header + models)
         space = 3
         for col0, col1 in header + models:
             line = col0.ljust(col0_max) + " " * space + col1

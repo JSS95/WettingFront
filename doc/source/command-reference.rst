@@ -6,10 +6,10 @@ Commands
 .. literalinclude:: help-wettingfront.txt
     :language: text
 
-analyze
+samples
 -------
 
-.. literalinclude:: help-wettingfront-analyze.txt
+.. literalinclude:: help-wettingfront-samples.txt
     :language: text
 
 models
@@ -18,8 +18,8 @@ models
 .. literalinclude:: help-wettingfront-models.txt
     :language: text
 
-samples
+analyze
 -------
 
-.. literalinclude:: help-wettingfront-samples.txt
+.. literalinclude:: help-wettingfront-analyze.txt
     :language: text

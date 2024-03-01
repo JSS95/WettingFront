@@ -277,6 +277,12 @@ def main():
         "file", type=str, nargs="+", help="glob pattern for configuration files"
     )
     analyze.add_argument(
+        "-r",
+        "--recursive",
+        action="store_true",
+        help="recursively find configuration files",
+    )
+    analyze.add_argument(
         "-e",
         "--entry",
         action="append",
@@ -334,6 +340,6 @@ def main():
             line = col0.ljust(col0_max) + " " * space + col1
             print(line)
     elif args.command == "analyze":
-        ok = analyze_files(*args.file, entries=args.entry)
+        ok = analyze_files(*args.file, recursive=args.recursive, entries=args.entry)
         if not ok:
             sys.exit(1)

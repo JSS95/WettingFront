@@ -7,9 +7,11 @@ To analyze with command line, specify the parameters in configuration file(s) an
 
 import argparse
 import csv
+import glob
 import json
 import logging
 import os
+import re
 import sys
 from typing import List, Optional
 
@@ -48,7 +50,9 @@ def get_sample_path(*paths: str) -> str:
     return str(files("wettingfront").joinpath("samples", *paths))
 
 
-def analyze_files(*paths: str, entries: Optional[List[str]] = None) -> bool:
+def analyze_files(
+    *paths: str, recursive: bool = False, entries: Optional[List[str]] = None
+) -> bool:
     """Perform analysis from configuration files.
 
     Supported formats:
@@ -56,15 +60,8 @@ def analyze_files(*paths: str, entries: Optional[List[str]] = None) -> bool:
         * JSON
 
     Each file can have multiple entries. Each entry must have ``type`` field which
-    specifies the analyzer. Analyzers are searched from entry point group
-    ``"wettingfront.analyzers"``, and must have the following signature:
-
-    * :obj:`str`: entry name
-    * :obj:`dict`: entry fields
-
-    For example, the following YAML file contains ``foo`` entry which is analyzed by
-    ``Foo`` analyzer. The analyzer is loaded by searching an entry point whose name is
-    ``Foo``.
+    specifies the analyzer. For example, the following YAML file contains ``foo``
+    entry which is analyzed by ``Foo`` analyzer.
 
     .. code-block:: yaml
 
@@ -72,9 +69,17 @@ def analyze_files(*paths: str, entries: Optional[List[str]] = None) -> bool:
             type: Foo
             ...
 
+    Analyzers are searched and loaded from entry point group
+    ``"wettingfront.analyzers"``, and must have the following signature:
+
+    * entry name (:obj:`str`)
+    * entry fields (:obj:`dict`)
+
     Arguments:
-        paths: Configuration file paths.
-        entries: If passed, only the entries with specified name are analyzed.
+        paths: Glob pattern for configuration file paths.
+        recursive: If True, search *paths* recursively.
+        entries: Regular expression for entries.
+            If passed, only the matching entries are analyzed.
 
     Returns:
         Whether the analysis is finished without error.
@@ -84,9 +89,17 @@ def analyze_files(*paths: str, entries: Optional[List[str]] = None) -> bool:
     for ep in entry_points(group="wettingfront.analyzers"):
         ANALYZERS[ep.name] = ep
 
-    ok = True
+    glob_paths = []
     for path in paths:
-        path = os.path.expandvars(path)
+        glob_paths.extend(glob.glob(os.path.expandvars(path), recursive=recursive))
+
+    if entries is not None:
+        entry_patterns = [re.compile(e) for e in entries]
+    else:
+        entry_patterns = []
+
+    ok = True
+    for path in glob_paths:
         _, ext = os.path.splitext(path)
         ext = ext.lstrip(os.path.extsep).lower()
         try:
@@ -104,9 +117,8 @@ def analyze_files(*paths: str, entries: Optional[List[str]] = None) -> bool:
             ok = False
             continue
         for k, v in data.items():
-            if entries is not None:
-                if k not in entries:
-                    continue
+            if entry_patterns and all([p.fullmatch(k) is None for p in entry_patterns]):
+                continue
             try:
                 typename = v["type"]
                 analyzer = ANALYZERS.get(typename, None)
@@ -261,12 +273,20 @@ def main():
             "Refer to the package documentation for configuration file structure."
         ),
     )
-    analyze.add_argument("file", type=str, nargs="+", help="configuration files")
+    analyze.add_argument(
+        "file", type=str, nargs="+", help="glob pattern for configuration files"
+    )
+    analyze.add_argument(
+        "-r",
+        "--recursive",
+        action="store_true",
+        help="recursively find configuration files",
+    )
     analyze.add_argument(
         "-e",
         "--entry",
         action="append",
-        help="entries in configuration files",
+        help="regex pattern for configuration file entries",
     )
 
     args = parser.parse_args()
@@ -320,6 +340,6 @@ def main():
             line = col0.ljust(col0_max) + " " * space + col1
             print(line)
     elif args.command == "analyze":
-        ok = analyze_files(*args.file, entries=args.entry)
+        ok = analyze_files(*args.file, recursive=args.recursive, entries=args.entry)
         if not ok:
             sys.exit(1)

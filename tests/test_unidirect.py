@@ -23,6 +23,8 @@ def test_Unidirectional_only_data(tmp_path):
             "wettingfront",
             "analyze",
             path,
+            "-e",
+            "data1",
         ],
     )
     assert not code

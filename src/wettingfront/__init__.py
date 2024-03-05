@@ -230,8 +230,8 @@ def main():
 
     samples = subparsers.add_parser(
         "samples",
-        description="Print path to sample directory.",
-        help="print path to sample directory",
+        description="Show path to sample directory.",
+        help="show path to sample directory",
     ).add_mutually_exclusive_group()
     samples.add_argument(
         "plugin",
@@ -248,8 +248,8 @@ def main():
 
     subparsers.add_parser(
         "models",
-        description="Print installed models.",
-        help="print installed models",
+        description="List installed models.",
+        help="list installed models",
     )
 
     analyze = subparsers.add_parser(

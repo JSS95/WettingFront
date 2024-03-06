@@ -149,7 +149,7 @@ def unidirect_analyzer(k, v):
 
     The analyzer defines the following fields in configuration entry:
 
-    - **model** (`str`): Wetting front model, implemented by plugins.
+    - **model** (`str`, optional): Wetting front model, implemented by plugins.
     - **path** (`str`): Path to the input video file.
     - **output-vid** (`str`, optional): Path to the output video file.
     - **output-data** (`str`, optional): Path to the output csv file.
@@ -175,7 +175,9 @@ def unidirect_analyzer(k, v):
         MODELS[ep.name] = ep
 
     # Prepare output
-    model = MODELS[v["model"]].load()
+    model = v.get("model")
+    if model is not None:
+        model = MODELS[model].load()
     path = os.path.expandvars(v["path"])
     out_vid = v.get("output-vid")
     out_data = v.get("output-data")
@@ -197,33 +199,45 @@ def unidirect_analyzer(k, v):
             frame[h, :] = (255, 0, 0)
             yield frame, int(frame.shape[0] - h)
 
-    # Get data (and write video)
-    immeta = iio.immeta(path, plugin="pyav")
-    fps = immeta["fps"]
-    heights = []
-    gen = yield_result(path)
-    if out_vid:
-        codec = immeta["codec"]
-        with iio.imopen(out_vid, "w", plugin="pyav") as out:
+    def iioWriter(path, codec, fps):
+        with iio.imopen(path, "w", plugin="pyav") as out:
             out.init_video_stream(codec, fps=fps)
-            for frame, h in gen:
+            while True:
+                frame = yield
                 out.write_frame(frame)
-                heights.append(h)
-    elif out_data:
-        for frame, h in gen:
+
+    immeta = iio.immeta(path, plugin="pyav")
+    gen = yield_result(path)
+
+    if out_vid:
+        iiowriter = iioWriter(out_vid, immeta["codec"], immeta["fps"])
+        next(iiowriter)
+    if out_data:
+        heights = []
+
+    for frame, h in gen:
+        if out_vid:
+            iiowriter.send(frame)
+        if out_data:
             heights.append(h)
 
     # write data
     if out_data:
-        times = np.arange(len(heights)) / fps
-        func, _ = model(times, heights)
-        predict = func(times)
+        times = np.arange(len(heights)) / immeta["fps"]
+        if model is None:
+            header = ["time (s)", "height (pixels)"]
+            data = zip(times, heights)
+        else:
+            header = ["time (s)", "height (pixels)", "fitted height (pixels)"]
+            func, _ = model(times, heights)
+            predict = func(times)
+            data = zip(times, heights, predict)
 
         with open(out_data, "w", newline="") as f:
             writer = csv.writer(f)
-            writer.writerow(["time (s)", "height (pixels)", "fitted height (pixels)"])
-            for t, h, w in zip(times, heights, predict):
-                writer.writerow([t, h, w])
+            writer.writerow(header)
+            for row in data:
+                writer.writerow(row)
 
 
 def main():

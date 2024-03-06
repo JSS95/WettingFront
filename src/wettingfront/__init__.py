@@ -329,9 +329,9 @@ def main():
                 )
                 sys.exit(1)
     elif args.command == "models":
-        header = [("NAME", "PACKAGE")]
+        header = [("NAME", "SOURCE")]
         models = [
-            (ep.name, ep.value.split(".")[0])
+            (ep.name, ep.value.split(":")[0])
             for ep in entry_points(group="wettingfront.models")
         ]
         col0_max = max(len(m[0]) for m in header + models)

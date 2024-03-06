@@ -100,10 +100,14 @@ f = open("help-wettingfront-samples.txt", "w")
 subprocess.call(["wettingfront", "samples", "-h"], stdout=f)
 f.close()
 
-f = open("help-wettingfront-analyze.txt", "w")
-subprocess.call(["wettingfront", "analyze", "-h"], stdout=f)
+f = open("help-wettingfront-analyzers.txt", "w")
+subprocess.call(["wettingfront", "analyzers", "-h"], stdout=f)
 f.close()
 
 f = open("help-wettingfront-models.txt", "w")
 subprocess.call(["wettingfront", "models", "-h"], stdout=f)
+f.close()
+
+f = open("help-wettingfront-analyze.txt", "w")
+subprocess.call(["wettingfront", "analyze", "-h"], stdout=f)
 f.close()

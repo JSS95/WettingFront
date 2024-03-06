@@ -12,6 +12,12 @@ samples
 .. literalinclude:: help-wettingfront-samples.txt
     :language: text
 
+analyzers
+---------
+
+.. literalinclude:: help-wettingfront-analyzers.txt
+    :language: text
+
 models
 ------
 

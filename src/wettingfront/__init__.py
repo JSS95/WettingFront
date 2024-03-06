@@ -259,6 +259,11 @@ def main():
     )
 
     subparsers.add_parser(
+        "analyzers",
+        description="List installed analyzers.",
+        help="list installed analyzers",
+    )
+    subparsers.add_parser(
         "models",
         description="List installed models.",
         help="list installed models",
@@ -328,15 +333,15 @@ def main():
                     f"Unknown plugin: '{args.plugin}' (use '-l' option to list plugins)"
                 )
                 sys.exit(1)
-    elif args.command == "models":
+    elif args.command in ["analyzers", "models"]:
         header = [("NAME", "SOURCE")]
-        models = [
+        eps = [
             (ep.name, ep.value.split(":")[0])
-            for ep in entry_points(group="wettingfront.models")
+            for ep in entry_points(group=f"wettingfront.{args.command}")
         ]
-        col0_max = max(len(m[0]) for m in header + models)
+        col0_max = max(len(m[0]) for m in header + eps)
         space = 3
-        for col0, col1 in header + models:
+        for col0, col1 in header + eps:
             line = col0.ljust(col0_max) + " " * space + col1
             print(line)
     elif args.command == "analyze":
